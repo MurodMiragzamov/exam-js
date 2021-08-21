@@ -9,162 +9,91 @@ const elTemplateUser = document.querySelector('.user_template').content,
       elTemplatePost = document.querySelector('.post_template').content,
       elTemplateComments = document.querySelector('.comments_template').content;
 
-// post number var
 
+fetch('https://jsonplaceholder.typicode.com/users').then((response)=>response.json()).then((dataUser)=>dataUser.forEach(evt=>{
+    if(dataUser){
+       const tempUser = elTemplateUser.cloneNode(true);
+       let  elUitem = tempUser.querySelector('.user_item'),
+            elUid = tempUser.querySelector('.user_id'),
+            elUname = tempUser.querySelector('.user_name'),
+            elUuser = tempUser.querySelector('.user_username'),
+            elUemail = tempUser.querySelector('.user_email'),
+            elUadd = tempUser.querySelector('.user_address'),
+            elUgeo = tempUser.querySelector('.user_geo'),
+            elUnumb = tempUser.querySelector('.user_number'),
+            elUweb = tempUser.querySelector('.user_web'),
+            elUcomp = tempUser.querySelector('.user_company'),
+            elUbtn = tempUser.querySelector('.btn_user');
 
-//fetch data
-fetch('https://jsonplaceholder.typicode.com/users').then((response)=>response.json()).then((data)=>renderUsers(data,elUserList));
+            elUid.textContent= evt.userId;
+            elUname.textContent= evt.name;
+            elUuser.textContent= evt.username;
+            elUemail.textContent= evt.email;
+            elUadd.textContent= evt.address;
+            elUgeo.textContent= evt.geo;
+            elUnumb.textContent= evt.phone;
+            elUweb.textContent= evt.website;
+            elUcomp.textContent= evt.company;
+            
 
+            elUserList.appendChild(elUitem)
 
-
-
-//render function's
-function renderUsers(el,element){
-
-    for (let i = 0 ; i <el.length;i++){
-    
-           const tempUser = elTemplateUser.cloneNode(true);
-
-    //user item content
-            let elUserItem = tempUser.querySelector('.user_item'),
-
-                elUserUserid = tempUser.querySelector('.user_id'),
-                elUserName = tempUser.querySelector('.user_name'),
-                elUserUserName = tempUser.querySelector('.user_username'),
-                elUserEmail = tempUser.querySelector('.user_email'),
-                elUserAddress = tempUser.querySelector('.user_address'),
-                elUserGeo = tempUser.querySelector('.user_geo'),
-                elUserNumber = tempUser.querySelector('.user_number'),
-                elUserWeb = tempUser.querySelector('.user_web'),
-                elUserCompany = tempUser.querySelector('.user_company'),
-                elUserBtn = tempUser.querySelector('.btn_user');
-
-               
-    // creat text content
-                elUserUserid.textContent = el[i].id;
-                elUserName.textContent = el[i].name;
-                elUserUserName.textContent = el[i].username;
-                elUserEmail.textContent = el[i].email;
-                elUserAddress.textContent = el[i].address;
-                elUserGeo.textContent = el[i].geo;
-                elUserNumber.textContent = el[i].phone;
-                elUserWeb.textContent = el[i].website;
-                elUserCompany.textContent = el[i].company;
-
-                elUserBtn.dataset.us_id = el[i].id;
-
-    //append
-            element.appendChild( elUserItem);
-     
-    //Event
-     
-            elUserBtn.addEventListener('click', evt=>{
-               
-                let postNumber =  evt.target.dataset.us_id
-                
-        //fetc post
-                fetch('https://jsonplaceholder.typicode.com/posts/'+postNumber).then((response)=>response.json()).then((dataPost)=>renderPost(dataPost,elPostList));
-
-                function renderPost(el,element){
-                   element.innerHTML = null;
-                   elCommentsList.innerHTML=null
+            elUbtn.addEventListener('click',function(){
+                elPostList.innerHTML=null;
+                elCommentsList.innerHTML=null;
+                fetch('https://jsonplaceholder.typicode.com/posts').then((response)=>response.json()).then((dataPost)=>dataPost.forEach(evte=>{
+                if(evte.userId==evt.id){
                     const tempPost = elTemplatePost.cloneNode(true);
 
-                    
-                    //post content
-                    let elPostItem = tempPost.querySelector('.post_item'),
+                    let  elPitem = tempPost.querySelector('.post_item'),
+                    elPUid = tempPost.querySelector('.post_userid'),
+                    elPid = tempPost.querySelector('.post_id'),
+                    elPtitle = tempPost.querySelector('.post_title'),
+                    elPbody = tempPost.querySelector('.post_body'),
+                    elPbtn = tempPost.querySelector('.btn_post');
 
-                        elPostUserid = tempPost.querySelector('.post_userid'),
-                        elPostId = tempPost.querySelector('.post_id'),
-                        elPostTitle = tempPost.querySelector('.post_title'),
-                        elPostbody = tempPost.querySelector('.post_body'),
-                        elPostBtn = tempPost.querySelector('.btn_post');
-
-
-                        elPostUserid.textContent = el.userId;
-                        elPostId.textContent = el.id;
-                        elPostTitle.textContent = el.title;
-                        elPostbody.textContent = el.body;
-
-                        element.appendChild(elPostItem);
-
-
-
-                            elPostBtn.addEventListener('click', evt=>{
-                                elCommentsList.innerHTML=null
-                            let commentsNumber =  postNumber
-
-                            fetch('https://jsonplaceholder.typicode.com/posts/'+commentsNumber+'/comments').then((response)=>response.json()).then((dataComments)=>dataComments.forEach(ele=>{
-                             
-                                const tempComments = elTemplateComments.cloneNode(true);
-
-                       let  elCommentsItem = tempComments.querySelector('.comments_item'),
-
-                            elCommentsPostid = tempComments.querySelector('.comments_postid'),
-                            elCommentsId = tempComments.querySelector('.comments_id'),
-                            elCommentsName = tempComments.querySelector('.comments_name'),
-                            elCommentsEmail = tempComments.querySelector('.comments_email'),
-                            elCommentsBody = tempComments.querySelector('.comments_body');
-
-
-                            elCommentsPostid.textContent = ele.postId;
-                            elCommentsId.textContent = ele.id;
-                            elCommentsName.textContent = ele.name;
-                            elCommentsEmail.textContent = ele.email;
-                            elCommentsBody.textContent = ele.body;
-
-                            elCommentsList.appendChild(elCommentsItem)
-                            }));
-
-                        })    
-                }
-
-               
-
-            //     let elPostBtn = elTemplatePost.querySelector('.btn_post');
-
-            //   console.log(elPostBtn)
-
-            //     elPostBtn.addEventListener('click',function(){
-
-            
-            //        elCommentsList.innerHTML =null
-            //        console.log('fewfwe')
+                    elPUid.textContent= evte.userId;
+                    elPid.textContent= evte.id;
+                    elPtitle.textContent= evte.title;
+                    elPbody.textContent= evte.body;
                    
-            //         fetch('https://jsonplaceholder.typicode.com/posts/'+postNumber+'/comments').then((response)=>response.json()).then((dataComments)=>dataComments);
+                    elPostList.appendChild(elPitem)
 
-            //         const tempComments = elTemplateComments.cloneNode(true);
 
-            //         let  elCommentsItem = tempComments.querySelector('.comments_item'),
-            //         elCommentsPostid = tempComments.querySelector('.comments_postid'),
-            //         elCommentsId = tempComments.querySelector('.comments_id'),
-            //         elCommentsName = tempComments.querySelector('.comments_name'),
-            //         elCommentsEmail = tempComments.querySelector('.comments_email'),
-            //         elCommentsBody = tempComments.querySelector('.comments_body');
+                    elPbtn.addEventListener('click',function(){//
+                        elCommentsList.innerHTML=null;
+                       if( commentsNumber = evte.id){
+                        fetch('https://jsonplaceholder.typicode.com/posts/'+commentsNumber+'/comments').then((response)=>response.json()).then((dataComments)=>dataComments.forEach(ele=>{
+                             
+                            const tempComments = elTemplateComments.cloneNode(true);
 
-            //         elCommentsPostid.textContent = dataComments.postId;
-            //         elCommentsId.textContent = dataComments.id;
-            //         elCommentsName.textContent = dataComments.name;
-            //         elCommentsEmail.textContent = dataComments.email;
-            //         elCommentsBody.textContent = dataComments.body;
+                        let  elCommentsItem = tempComments.querySelector('.comments_item'),
 
-            //         elCommentsList.appendChild(elCommentsItem)
-                
-            //     })
-              
-                
+                        elCommentsPostid = tempComments.querySelector('.comments_postid'),
+                        elCommentsId = tempComments.querySelector('.comments_id'),
+                        elCommentsName = tempComments.querySelector('.comments_name'),
+                        elCommentsEmail = tempComments.querySelector('.comments_email'),
+                        elCommentsBody = tempComments.querySelector('.comments_body');
+
+
+                        elCommentsPostid.textContent = ele.postId;
+                        elCommentsId.textContent = ele.id;
+                        elCommentsName.textContent = ele.name;
+                        elCommentsEmail.textContent = ele.email;
+                        elCommentsBody.textContent = ele.body;
+
+                        elCommentsList.appendChild(elCommentsItem)
+                        }))
+                       }
+                     
+
+                        
+                        //
+                    })
+
+
+                }
+                }))
             })
-
-          
-            
-            
-
     }
-}
-
-//
-///
-//
-////
-//////
-///////
+}))
